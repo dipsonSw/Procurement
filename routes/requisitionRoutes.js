@@ -22,8 +22,10 @@ const {
     getRequisitionById,
     updateRequisition,
     deleteRequisition,
-    approveRequisition,
-    getRequisitionsByUser
+    // approveRequisition,
+    getRequisitionsByUser,
+    approveRequisitionLevel1,
+    approveRequisitionLevel2
 } = require('../controllers/requisitionController');
 
 const router = express.Router();
@@ -44,7 +46,8 @@ router.put('/requisitions/:id', updateRequisition);
 router.delete('/requisitions/:id', deleteRequisition);
 
 // Route to approve or reject a requisition
-router.post('/requisitions/approve', approveRequisition);
+router.post('/requisitions/approvelevel1', approveRequisitionLevel1);
+router.post('/requisitions/approvelevel2', approveRequisitionLevel2);
 
 
 // Route to get all requisitions made by a specific user

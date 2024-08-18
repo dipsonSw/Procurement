@@ -1,22 +1,22 @@
 const express = require('express');
+const userRoutes = require('./routes/userRoutes');
 const requisitionRoutes = require('./routes/requisitionRoutes');
 require('dotenv').config(); // To load environment variables from a .env file
-
-//Using Swagger
-const swaggerUI = require('swagger-ui-express');
-const swaggerSpec = require('./config/swagger');
-
-
 // Import database connection
-require('./config/db'); // Assuming db.js is in the same directory level as app.js
+require('./config/db'); // 
 
 const app = express();
 
-//Middleware for Swagger
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+// Middleware for Swagger
+const setupSwagger = require('./config/swagger');
+setupSwagger(app); // Set up Swagger
 
 // Middleware to parse JSON
 app.use(express.json());
+
+
+// Register the user routes
+app.use('/api', userRoutes);
 
 // Register the requisition routes
 app.use('/api', requisitionRoutes);
