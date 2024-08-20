@@ -1,20 +1,3 @@
-/**
- * @swagger
- * /requisitions:
- *   get:
- *     summary: Get all requisitions
- *     tags: [Requisitions]
- *     responses:
- *       200:
- *         description: A list of requisitions
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Requisition'
- */
-
 const express = require('express');
 const {
     createRequisition,
@@ -31,23 +14,23 @@ const {
 const router = express.Router();
 
 // Route to create a new requisition
-router.post('/requisitions', createRequisition);
+router.post('/', createRequisition);
 
 // Route to get all requisitions
-router.get('/requisitions', getAllRequisitions);
+router.get('/', getAllRequisitions);
 
 // Route to get a single requisition by ID
-router.get('/requisitions/:id', getRequisitionById);
+router.get('/:id', getRequisitionById);
 
 // Route to update a requisition by ID
-router.put('/requisitions/:id', updateRequisition);
+router.put('/:id', updateRequisition);
 
 // Route to delete a requisition by ID
-router.delete('/requisitions/:id', deleteRequisition);
+router.delete('/:id', deleteRequisition);
 
 // Route to approve or reject a requisition
-router.post('/requisitions/approvelevel1', approveRequisitionLevel1);
-router.post('/requisitions/approvelevel2', approveRequisitionLevel2);
+router.post('/approvelevel1', approveRequisitionLevel1);
+router.post('/approvelevel2', approveRequisitionLevel2);
 
 
 // Route to get all requisitions made by a specific user

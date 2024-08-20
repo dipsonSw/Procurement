@@ -1,6 +1,7 @@
 const express = require('express');
 const userRoutes = require('./routes/userRoutes');
 const requisitionRoutes = require('./routes/requisitionRoutes');
+const purchaseOrderRoutes = require('./routes/purchaseOrderRoutes');
 require('dotenv').config(); // To load environment variables from a .env file
 // Import database connection
 require('./config/db'); // 
@@ -16,10 +17,12 @@ app.use(express.json());
 
 
 // Register the user routes
-app.use('/api', userRoutes);
+app.use('/api/users', userRoutes);
 
 // Register the requisition routes
-app.use('/api', requisitionRoutes);
+app.use('/api/requisitions', requisitionRoutes);
+
+app.use('/api/purchaseorder', purchaseOrderRoutes);
 
 // Basic route to check if the server is running
 app.get('/', (req, res) => {
