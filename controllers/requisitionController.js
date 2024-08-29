@@ -33,8 +33,8 @@ const createRequisition = async (req, res) => {
 
     try {
         const { requisitionNo, requisitionDate, requestor, requestType, expenseType, purpose, supplierVendorInformation, items } = req.body;
-        const requestorId = new mongoose.Types.ObjectId(requestor);
-
+        // const requestorId = new mongoose.Types.ObjectId(requestor);
+        const requestorId = 111
         const newRequisition = new Requisition({
             requisitionNo,
             requisitionDate,
@@ -52,7 +52,7 @@ const createRequisition = async (req, res) => {
             }
         });
 
-        await newRequisition.save();
+        // await newRequisition.save();
 
         //Generate PDF
         const pdfFilePath = await generateRequisitionPDF(newRequisition);
@@ -65,7 +65,8 @@ const createRequisition = async (req, res) => {
             const subject1 = `Approval Required for Requisition ${requisitionNo} (Level 1)`;
             const text1 = `A new requisition has been created and requires your approval.\n\nRequisition No: ${requisitionNo}\nRequestor: ${requestor}\nPurpose: ${purpose}\n\nPlease log in to the system to review and approve this requisition at level 1.`;
 
-            await sendEmail(level1Approver.email, subject1, text1, pdfFilePath);
+            //await sendEmail(level1Approver.email, subject1, text1, pdfFilePath);
+            await sendEmail('procurementtestemail@gmail.com', subject1, text1, pdfFilePath);
         }
 
         // Clean up the PDF file after sending
