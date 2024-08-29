@@ -21,7 +21,14 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*'); // or specify a specific domain
     next();
   });
-
+  const cors = require('cors');
+  app.use(cors())
+  app.use(cors({
+    origin: 'http://10.11.0.141:3001',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  }));
+// 
 
 // user routes
 app.use('/api/users', userRoutes);
