@@ -4,6 +4,7 @@ const sendEmail = require('../config/email');
 const generateRequisitionPDF = require('../config/pdf');
 const fs = require('fs');
 const path = require('path');
+const mongoose = require('mongoose');
 // Create a new requisition
 // const createRequisition = async (req, res) => {
 //     try {
@@ -29,13 +30,16 @@ const path = require('path');
 
 
 const createRequisition = async (req, res) => {
+
     try {
         const { requisitionNo, requisitionDate, requestor, requestType, expenseType, purpose, supplierVendorInformation, items } = req.body;
+        const requestorId = new mongoose.Types.ObjectId(requestor);
 
         const newRequisition = new Requisition({
             requisitionNo,
             requisitionDate,
-            requestor,
+            requestor: requestorId,
+            // requestor,
             requestType,
             expenseType,
             purpose,
@@ -50,11 +54,11 @@ const createRequisition = async (req, res) => {
 
         await newRequisition.save();
 
-        // Generate PDF
+        //Generate PDF
         const pdfFilePath = await generateRequisitionPDF(newRequisition);
 
         // Fetch the level 1 approver's email
-        const level1Approver = await User.findOne({ designation: 'Level 1 Approver' }); // Replace with actual logic
+        const level1Approver = await User.findOne({ designation: 'admin' }); // Replace with actual logic
 
         if (level1Approver) {
             // Send email notification to level 1 approver
@@ -65,7 +69,7 @@ const createRequisition = async (req, res) => {
         }
 
         // Clean up the PDF file after sending
-        fs.unlinkSync(pdfFilePath);
+        // fs.unlinkSync(pdfFilePath);
 
         res.status(201).json(newRequisition);
     } catch (err) {

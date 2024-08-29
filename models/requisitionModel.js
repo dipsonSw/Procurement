@@ -21,7 +21,7 @@ const itemSchema = new Schema({
 
 // Define the main Requisition schema
 const requisitionSchema = new Schema({
-    requisitionNo: { type: String, required: true, unique: true },
+    requisitionNo: { type: String, required: true, unique: false},
     requisitionDate: { type: Date, required: true },
     requestor: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to User model
     requestType: { type: String, required: true },

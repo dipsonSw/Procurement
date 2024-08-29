@@ -4,7 +4,8 @@ const requisitionRoutes = require('./routes/requisitionRoutes');
 const purchaseOrderRoutes = require('./routes/purchaseOrderRoutes');
 require('dotenv').config(); // To load environment variables from a .env file
 // Import database connection
-require('./config/db'); // 
+const connectDB = require('./config/db'); // 
+connectDB()
 
 const app = express();
 
@@ -15,13 +16,20 @@ setupSwagger(app); // Set up Swagger
 // Middleware to parse JSON
 app.use(express.json());
 
+//for Cors
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*'); // or specify a specific domain
+    next();
+  });
 
-// Register the user routes
+
+// user routes
 app.use('/api/users', userRoutes);
 
-// Register the requisition routes
+// requisition routes
 app.use('/api/requisitions', requisitionRoutes);
 
+// procurement 
 app.use('/api/purchaseorder', purchaseOrderRoutes);
 
 // Basic route to check if the server is running
@@ -36,5 +44,5 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
