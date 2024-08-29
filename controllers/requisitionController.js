@@ -63,16 +63,23 @@ const createRequisition = async (req, res) => {
         if (level1Approver) {
             // Send email notification to level 1 approver
             const subject = `Approval Required for Requisition ${requisitionNo} (Level 1)`;
-            const text = `A new requisition has been created and requires your approval.\n\nRequisition No: ${requisitionNo}\nRequestor: ${requestor}\nPurpose: ${purpose}\n\nPlease log in to the system to review and approve this requisition at level 1.`;
+            const text = `A new requisition has been created and requires your approval.<br>Requisition No: ${requisitionNo}<br>Requestor: ${requestor}<br>Purpose: ${purpose}<br>Please review and approve this requisition at level 1.`;
             let html = `
             <p>${text}</p>
             <p>
-                <a href="#" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: green; text-decoration: none; border-radius: 5px;">Approve</a>
-                <a href="#" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: red; text-decoration: none; border-radius: 5px; margin-left: 10px;">Decline</a>
+                <p>
+                    <button id='${newRequisition._id}' style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: green; text-decoration: none; border-radius: 5px;">Approve</button>
+                    <button id='${newRequisition._id}' style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: red; text-decoration: none; border-radius: 5px; margin-left: 10px;">Decline</button>
+                </p>
             </p>
+            <script>
+                document.querySelector('button').addEventListener('click',()=>{
+                        alert('Approved')
+                    })
+            </script>
         `
             //await sendEmail(level1Approver.email, subject, text, pdfFilePath);
-            await sendEmail('procurementtestemail@gmail.com', subject, text, html, pdfFilePath);
+            await sendEmail('procurementtestemail@gmail.com', subject, html, pdfFilePath);
         }
 
         // Clean up the PDF file after sending
@@ -110,15 +117,15 @@ const approveRequisitionLevel1 = async (req, res) => {
 
                 // Send email notification to level 2 approver
                 const subject = `Approval Required for Requisition ${requisition.requisitionNo} (Level 2)`;
-                const text = `Requisition No: ${requisition.requisitionNo} has been approved at level 1 and requires your approval at level 2.\n\nPlease log in to the system to review and approve this requisition.`;
+                const text = `Requisition No: ${requisition.requisitionNo} has been approved at level 1 and requires your approval at level 2.<br>Please review and approve this requisition.`;
                 let html = `
                     <p>${text}</p>
                     <p>
-                        <a href="#" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: green; text-decoration: none; border-radius: 5px;">Approve</a>
-                        <a href="#" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: red; text-decoration: none; border-radius: 5px; margin-left: 10px;">Decline</a>
+                        <button id='${newRequisition._id}' style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: green; text-decoration: none; border-radius: 5px;">Approve</button>
+                        <button id='${newRequisition._id}' style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: red; text-decoration: none; border-radius: 5px; margin-left: 10px;">Decline</button>
                     </p>
                 `
-                await sendEmail(level2Approver.email, subject, text, html, pdfFilePath);
+                await sendEmail(level2Approver.email, subject, html, pdfFilePath);
 
                 // Clean up the PDF file after sending
                 fs.unlinkSync(pdfFilePath);
