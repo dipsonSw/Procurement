@@ -14,12 +14,13 @@ const transporter = nodemailer.createTransport({
 });
 
 
-const sendEmail = (to, subject, text, filePath) => {
+const sendEmail = (to, subject, text, html, filePath) => {
     const mailOptions = {
         from: process.env.EMAIL,
         to: to,
         subject: subject,
         text: text, 
+        html: html,
         attachments: [
             {
                 filename: path.basename(filePath), 

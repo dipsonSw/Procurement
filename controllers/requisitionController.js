@@ -62,11 +62,17 @@ const createRequisition = async (req, res) => {
 
         if (level1Approver) {
             // Send email notification to level 1 approver
-            const subject1 = `Approval Required for Requisition ${requisitionNo} (Level 1)`;
-            const text1 = `A new requisition has been created and requires your approval.\n\nRequisition No: ${requisitionNo}\nRequestor: ${requestor}\nPurpose: ${purpose}\n\nPlease log in to the system to review and approve this requisition at level 1.`;
-
-            //await sendEmail(level1Approver.email, subject1, text1, pdfFilePath);
-            await sendEmail('procurementtestemail@gmail.com', subject1, text1, pdfFilePath);
+            const subject = `Approval Required for Requisition ${requisitionNo} (Level 1)`;
+            const text = `A new requisition has been created and requires your approval.\n\nRequisition No: ${requisitionNo}\nRequestor: ${requestor}\nPurpose: ${purpose}\n\nPlease log in to the system to review and approve this requisition at level 1.`;
+            let html = `
+            <p>${text}</p>
+            <p>
+                <a href="#" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: green; text-decoration: none; border-radius: 5px;">Approve</a>
+                <a href="#" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: red; text-decoration: none; border-radius: 5px; margin-left: 10px;">Decline</a>
+            </p>
+        `
+            //await sendEmail(level1Approver.email, subject, text, pdfFilePath);
+            await sendEmail('procurementtestemail@gmail.com', subject, text, html, pdfFilePath);
         }
 
         // Clean up the PDF file after sending
@@ -103,10 +109,16 @@ const approveRequisitionLevel1 = async (req, res) => {
                 const pdfFilePath = await generateRequisitionPDF(requisition);
 
                 // Send email notification to level 2 approver
-                const subject2 = `Approval Required for Requisition ${requisition.requisitionNo} (Level 2)`;
-                const text2 = `Requisition No: ${requisition.requisitionNo} has been approved at level 1 and requires your approval at level 2.\n\nPlease log in to the system to review and approve this requisition.`;
-
-                await sendEmail(level2Approver.email, subject2, text2, pdfFilePath);
+                const subject = `Approval Required for Requisition ${requisition.requisitionNo} (Level 2)`;
+                const text = `Requisition No: ${requisition.requisitionNo} has been approved at level 1 and requires your approval at level 2.\n\nPlease log in to the system to review and approve this requisition.`;
+                let html = `
+                    <p>${text}</p>
+                    <p>
+                        <a href="#" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: green; text-decoration: none; border-radius: 5px;">Approve</a>
+                        <a href="#" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: red; text-decoration: none; border-radius: 5px; margin-left: 10px;">Decline</a>
+                    </p>
+                `
+                await sendEmail(level2Approver.email, subject, text, html, pdfFilePath);
 
                 // Clean up the PDF file after sending
                 fs.unlinkSync(pdfFilePath);
